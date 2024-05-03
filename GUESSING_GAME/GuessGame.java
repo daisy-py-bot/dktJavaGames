@@ -17,7 +17,7 @@ public class GuessGame extends JFrame implements ActionListener{
     }
 
 
-    public static int randomNumGenerated = 0; // the number from the random generator
+    public static int randomNumGenerated; // the number from the random generator
     public static int totalScore; // displays the total score (if score goes below 0, the game is over)
     public static int pointsEarned; // will be the same as the trials left (you can earn negative points for guessing more than 10 times per each guess)
     public static final int MAX_POINTS_PER_GUESS = 10;
@@ -51,18 +51,20 @@ public class GuessGame extends JFrame implements ActionListener{
     JTextField textBox1;
     JTextField comment;
 
+    // declare the variable name for an option pane (pop ups)
     JOptionPane paneMessage;
 
 
     // constructor for the frame
     public GuessGame(){
-        // UIManager.put("ProgressBar.background", Color.WHITE); // Set background color
-        // UIManager.put("ProgressBar.foreground", Color.GREEN); // Set foreground color
+        // randomly generate a number
+        generateRandomNumber();
 
-
+        System.out.println(randomNumGenerated); // display the first randomly generated number
         
-        // create the buttons
 
+
+        // create the buttons
         enterButton = new JButton();
         nextButton = new JButton();
         exitButton = new JButton();
@@ -72,7 +74,6 @@ public class GuessGame extends JFrame implements ActionListener{
 
 
         // create the panel objects
-
         // PANEL 1: Progress Bar
 
         panel1 = new JPanel();
@@ -201,10 +202,10 @@ public class GuessGame extends JFrame implements ActionListener{
         comment.setForeground(Color.BLACK); // set the text color
         comment.setFont(new Font("MV Boli", Font.PLAIN, 20));
         comment.setVisible(true);
-        comment.setText("Game starting! Make your first guess!");
+        comment.setText("Game starting! Make your first guess!"); // display the initial comment for player to start game
 
-        panel5.add(comment);
-        panel5.setVisible(true);
+        panel5.add(comment); // add the textfield to panel 5
+        panel5.setVisible(true); // make the panel visible
 
 
 
@@ -215,17 +216,17 @@ public class GuessGame extends JFrame implements ActionListener{
         panel6.setBackground(Color.DARK_GRAY);
         panel6.setLayout(null);
 
-        exitButton = new JButton("Exit");
+        exitButton = new JButton("Exit"); // create an exit button
         exitButton.setForeground(Color.red);
         exitButton.setBounds(500, 10, 200, 90);
         exitButton.setFont(new Font("MV Boli", Font.PLAIN, 25));
-        exitButton.addActionListener(this); // add an event lister when clicked
+        exitButton.addActionListener(this); // add an event listener when clicked
 
-        restartButton = new JButton("Restart");
+        restartButton = new JButton("Restart"); // create a restart button
         restartButton.setBackground(Color.GRAY);
         restartButton.setBounds(800, 10, 200, 90);
         restartButton.setFont(new Font("MV Boli", Font.PLAIN, 25));
-        restartButton.addActionListener(this);
+        restartButton.addActionListener(this); // add an event listener when clicked
 
         panel6.add(exitButton);
         panel6.add(restartButton);
@@ -260,12 +261,14 @@ public class GuessGame extends JFrame implements ActionListener{
      */
     public void  actionPerformed(ActionEvent e){
         if (e.getSource() == enterButton){
-            System.out.println("Enter button clicked"); // display in the console
+            //System.out.println("Enter button clicked"); // display in the console
+            
 
             int guess = getGuessedValue();   // get the guessed value
             
             boolean guessIsCorrect = checkAnswer(guess);   // check if guess is correct
 
+            // player makes a correct guess
             if(guessIsCorrect){
                 nextButton.setEnabled(true);   // enable the next button
 
@@ -273,18 +276,23 @@ public class GuessGame extends JFrame implements ActionListener{
 
                 pointsEarned = numOfTrialLeft; // the points earned are same as the trials left
 
-                //totalScore =+ pointsEarned; // calculate the total score
-
                 fillProgressBar(pointsEarned); // fill the progress bar (points earned = 10 - trials used)
+
                 
+                // user gets negative points
                 if (pointsEarned < 0){
                     // have lost points: number of trials exceed 10
                     displayComment("Oups! Correct guess, but you have lost " + (pointsEarned * -1) + " points. Try harder next time.");
                 }
+
+                // user gets positive points
                 else{
-                    //popUps();
-                    virusDetected();
                     displayComment("Correct guess! You have gained " + pointsEarned + " points. Impressive!"); // send a message
+                    // user gets points above 6
+                    if (pointsEarned >= 7){
+                        // show a pop up message praising the player
+                        popUps();
+                    }
                 }
 
                 endGame(); // check if the game has ended
@@ -292,9 +300,12 @@ public class GuessGame extends JFrame implements ActionListener{
                 countPlays++; // add the count for the number of times the user has played
 
                 
+
+                
                 
             }
-            else{
+            // player makes a wrong guess, but the value is greater than or equal to 0
+            else if (!guessIsCorrect && guess >= 0){
                 numOfTrialLeft--; // deduct the number of trials left
 
                 if (guess < randomNumGenerated){
@@ -305,24 +316,24 @@ public class GuessGame extends JFrame implements ActionListener{
                     displayComment("Oups, Incorrect! Guess is too high. Try again."); // tell player they have made an incorrect guess                   
                 }
 
-                textBox1.setText(""); // clear the text entry box
-
                 nextButton.setEnabled(false); // disable the next button till the user makes a correct guess
 
                 enterButton.setEnabled(true);  // enable the enter box to allow player to enter another input
 
-                
-             
-
             }
+            // player enters invalid input
+            else{
+                displayComment("Error! Invalid input. Enter an integer between 0 and 100.");
+            }
+
+            textBox1.setText(""); // clear the text entry box
 
         }
 
+        // player clicks the next button
         if(e.getSource() == nextButton){
-            System.out.println("Next button clicked");
-
-            
-            
+            //System.out.println("Next button clicked");
+    
             pointsEarned = 0; // reset points earned and number of trials
 
             numOfTrialLeft = 10; // reset points earned and number of trials
@@ -338,6 +349,7 @@ public class GuessGame extends JFrame implements ActionListener{
             
         }
 
+        // player clicks exit button
         if(e.getSource() == exitButton){
             System.out.println("Exiting Game");
 
@@ -353,16 +365,26 @@ public class GuessGame extends JFrame implements ActionListener{
 
     }
 
-    public void virusDetected(){
-        while (true) {
-            JOptionPane.showMessageDialog(null, "Virus Detected!!!", "DANGER!!", JOptionPane.WARNING_MESSAGE);
+    // public void virusDetected(){
+    //     while (true) {
+    //         JOptionPane.showMessageDialog(null, "Virus Detected!!!", "DANGER!!", JOptionPane.WARNING_MESSAGE);
 
-        }
-    }
+    //     }
+    // }
+
+    /**
+     * extracts the total score from player's progress bar
+     * @return total score
+     */
     public int getTotalScore(){
         int total = pBar.getValue();
         return total;
     }
+
+
+    /**
+     * sends messages to the comment textbox to notify the player that the game has ended
+     */
     public void endGame(){
         
         if (gameOver()){
@@ -379,22 +401,35 @@ public class GuessGame extends JFrame implements ActionListener{
         }
     }
 
+    /**
+     * restarts the game
+     * invoked by the restart button
+     */
     public void restartGame(){
         // reset values
         new GuessGame();
     }
 
+    /**
+     * gets the value guessed by the user
+     * the value should be an integer
+     * if value is not an integer, the player is notified
+     * @return the integer value guessed by player
+     */
     public int getGuessedValue(){
         String text = textBox1.getText();
-        int guessedNumber = 0;
+        int guessedNumber = -1;
         try{
             guessedNumber = Integer.parseInt(text); // assume the user enters an integer
-            
+            if (guessedNumber < 0){
+                throw new Exception("Negative number invalid.");
+            }   
 
         }
         catch(Exception e){
             // display the error in the content display panel
-            displayComment("Error! Invalid input: Enter an integer.");
+            System.out.println("Error! Invalid input " + e.getMessage());
+            displayComment("Error! Invalid input " + e.getMessage());
         }
         // return the guess value entered
         return guessedNumber;
@@ -402,6 +437,9 @@ public class GuessGame extends JFrame implements ActionListener{
     }
 
 
+    /**
+     * pop up message with motivation for the player
+     */
     public void popUps(){
         paneMessage = new JOptionPane();
         String[] responses = {"Thank you!", "I know!", "No, you are owesome!"};
@@ -409,6 +447,10 @@ public class GuessGame extends JFrame implements ActionListener{
 
     }
 
+    /**
+     * displays a string message onto the textfiled to guide the player to making a correct guess
+     * @param message carrries the message for the player
+     */
     public void displayComment(String message){
         // set a new comment in the comment display panel
         comment.setText(message);
@@ -452,6 +494,11 @@ public class GuessGame extends JFrame implements ActionListener{
     }
 
 
+
+    /**
+     * checks if the game is over
+     * @return true if the game is over
+     */
     public boolean gameOver(){
         if (getTotalScore() < 0){
             // game is over when the total points go below 0
