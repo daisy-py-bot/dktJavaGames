@@ -1,8 +1,8 @@
-package Ass3;
 /*
+    STEPS
  1. Keep gueesing words in a list OR take the words from the command line
  2. Prompt the user to guess one letter at a time (order does not matter)
- 3. Tell the user when they enter a wrong guess
+ 3. Tell the user// when they enter a wrong guess
  4. Keep track of the number of misses
  5. Display actual letter when user guess is correct
  6. When user finishes, display number of misses

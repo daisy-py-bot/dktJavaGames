@@ -1,4 +1,4 @@
-package CONNECT_FOUR;
+//package CONNECT_FOUR;
 
 /*A game played by dropping balls in either of the seven columns until four similar balls form
 a row or column or a diagonal
