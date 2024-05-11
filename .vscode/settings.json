@@ -1,0 +1,7 @@
+{
+    "java.project.sourcePaths": [
+        "GUESSING_GAME",
+        "CONNECT_FOUR"
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
+}
