@@ -1,13 +1,3 @@
-'''
-TEAM 8 MEMBERS           STUDENT ID
-
-Daisy Kudzai Tsenesa     67302026
-Francis Kwame Sewor      89722026
-Jude Adom Amoah          62792026
-Samuel Muyambaze         75162026.
-Aduot Malueth Aduot Jok  84012026
-
-'''
 
 
 from random import *
